@@ -1,0 +1,78 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 28,
+  "spacing": 0,
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "modules-left": [
+    "sway/workspaces"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "custom/temp",
+    "battery",
+    "cpu",
+    "memory",
+    "custom/bluetooth",
+    "pulseaudio",
+    "network"
+  ],
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{name}",
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+  "clock": {
+    "format": "{:%m-%d %H:%M}",
+    "tooltip-format": "{:%A, %d %B %Y}"
+  },
+  "custom/temp": {
+    "exec": "$HOME/.config/waybar/scripts/temp.sh",
+    "interval": 5,
+    "format": "tmp {}°"
+  },
+  "battery": {
+    "states": {
+      "warning": 25,
+      "critical": 10
+    },
+    "format": "bat {capacity}%",
+    "format-charging": "bat+ {capacity}%",
+    "format-plugged": "bat {capacity}%"
+  },
+  "memory": {
+    "format": "ram {percentage}%"
+  },
+  "custom/bluetooth": {
+    "exec": "$HOME/.config/waybar/scripts/bluetooth.sh",
+    "interval": 5,
+    "format": "{}",
+    "on-click": "blueman-manager"
+  },
+  "pulseaudio": {
+    "format": "vol {volume}%",
+    "format-muted": "muted",
+    "on-click": "pavucontrol"
+  },
+  "network": {
+    "format-wifi": "wifi {ipaddr}",
+    "format-ethernet": "eth {ipaddr}",
+    "format-disconnected": "offline",
+    "tooltip-format": "{ifname}\n{ipaddr}/{cidr}\n{essid}\n{signalStrength}%"
+  },
+  "cpu": {
+    "interval": 2,
+    "format": "cpu {usage}%"
+  }
+}

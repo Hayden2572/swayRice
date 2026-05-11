@@ -1,0 +1,58 @@
+# ==========================================================
+# WEXP STARSHIP — TEAL POWERLINE PROMPT
+# ==========================================================
+
+add_newline = false
+palette = "wexp"
+
+format = "$custom$directory$git_branch$git_status$cmd_duration "
+right_format = "$time"
+
+[palettes.wexp]
+bg = "#0b0f19"
+dark = "#141820"
+dark2 = "#1a1f28"
+teal = "#8fbcbb"
+teal2 = "#6aa6a3"
+green = "#a3be8c"
+yellow = "#ebcb8b"
+blue = "#81a1c1"
+red = "#bf616a"
+fg = "#d8dee9"
+muted = "#6b7280"
+
+[custom.userhost]
+command = 'printf "%s@kubuntu" "$USER"'
+when = true
+style = "fg:green bg:dark bold"
+format = "[ $output ]($style)[](fg:dark bg:teal)"
+
+[directory]
+style = "fg:bg bg:teal bold"
+format = "[ $path ]($style)[](fg:teal) "
+truncation_length = 4
+truncate_to_repo = false
+home_symbol = "~"
+
+[git_branch]
+symbol = " "
+style = "fg:fg bg:dark2 bold"
+format = "[ $symbol$branch ]($style)[](fg:dark2) "
+
+[git_status]
+style = "fg:red bold"
+format = "[$all_status$ahead_behind]($style) "
+
+[cmd_duration]
+min_time = 1500
+style = "fg:blue bold"
+format = "[$duration]($style) "
+
+[time]
+disabled = false
+time_format = "%H:%M:%S"
+style = "fg:muted bold"
+format = "[ $time ]($style)"
+
+[character]
+disabled = true

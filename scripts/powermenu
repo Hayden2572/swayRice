@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+choice="$(printf "lock\nlogout\nreboot\npoweroff" | rofi -dmenu -p "power" -theme ~/.config/rofi/theme.rasi)"
+
+case "$choice" in
+  lock)
+    swaylock -f -c 05070a
+    ;;
+  logout)
+    swaymsg exit
+    ;;
+  reboot)
+    systemctl reboot
+    ;;
+  poweroff)
+    systemctl poweroff
+    ;;
+esac

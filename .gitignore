@@ -1,0 +1,25 @@
+# Secrets
+.env
+*.env
+*.key
+*.pem
+id_rsa
+id_ed25519
+*.kdbx
+
+# System/private network configs
+netplan/
+NetworkManager/
+system-connections/
+
+# Archives/backups
+*.tar.gz
+*.zip
+*.bak
+*.backup
+*.old
+
+# Cache
+.cache/
+__pycache__/
+*.pyc

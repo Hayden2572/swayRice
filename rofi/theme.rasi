@@ -1,0 +1,72 @@
+* {
+    bg:        #0b0d12dd;
+    bg-alt:    #1e2030dd;
+    fg:        #cad3f5;
+    muted:     #6e738d;
+    accent:    #8bd5ca;
+    urgent:    #ed8796;
+
+    background-color: transparent;
+    text-color: @fg;
+
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    width: 38%;
+    border: 1px;
+    border-color: @accent;
+    border-radius: 14px;
+    background-color: @bg;
+}
+
+mainbox {
+    padding: 18px;
+    spacing: 14px;
+    background-color: transparent;
+}
+
+inputbar {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background-color: @bg-alt;
+}
+
+prompt {
+    text-color: @accent;
+    padding: 0 10px 0 0;
+}
+
+entry {
+    placeholder: "search";
+    placeholder-color: @muted;
+}
+
+listview {
+    lines: 8;
+    columns: 1;
+    spacing: 8px;
+    fixed-height: false;
+}
+
+element {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+element selected {
+    background-color: @accent;
+    text-color: #0b0d12;
+}
+
+element-icon {
+    size: 22px;
+    margin: 0 10px 0 0;
+}
+
+element-text {
+    vertical-align: 0.5;
+}

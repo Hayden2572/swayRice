@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec kitty --title ranger-fm ranger "$HOME"

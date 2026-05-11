@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+LOCKDIR="/tmp/swaylock-$USER"
+mkdir -p "$LOCKDIR"
+rm -f "$LOCKDIR"/*.png
+
+TIME_TEXT="$(date '+%H:%M')"
+DATE_TEXT="$(date '+%a, %d.%m.%Y')"
+
+MAGICK_BIN="$(command -v magick || command -v convert)"
+
+# Получаем список активных мониторов
+outputs="$(swaymsg -t get_outputs | jq -r '.[] | select(.active == true) | .name')"
+
+args=()
+
+for output in $outputs; do
+  raw="$LOCKDIR/raw-$output.png"
+  img="$LOCKDIR/lock-$output.png"
+
+  grim -o "$output" "$raw"
+
+  "$MAGICK_BIN" "$raw" \
+    -scale 10% \
+    -blur 0x4 \
+    -resize 1000% \
+    -fill "#0b0f19" \
+    -colorize 38 \
+    -gravity center \
+    -font "JetBrainsMono-Nerd-Font-Mono" \
+    -pointsize 38 \
+    -fill "#d8dee9" \
+    -annotate +0-18 "$TIME_TEXT" \
+    -pointsize 18 \
+    -fill "#8fbcbb" \
+    -annotate +0+34 "$DATE_TEXT" \
+    "$img"
+
+  args+=("-i" "$output:$img")
+done
+
+exec swaylock \
+  -f \
+  "${args[@]}" \
+  -s fill \
+  --indicator-idle-visible \
+  --indicator-radius 132 \
+  --indicator-thickness 14 \
+  --inside-color 0b0f1900 \
+  --inside-ver-color 8fbcbb22 \
+  --inside-wrong-color bf616a33 \
+  --ring-color 8fbcbbff \
+  --ring-ver-color a3be8cff \
+  --ring-wrong-color bf616aff \
+  --line-color 00000000 \
+  --separator-color 00000000 \
+  --text-color 00000000 \
+  --text-ver-color d8dee9ff \
+  --text-wrong-color bf616aff \
+  --key-hl-color a3be8cff \
+  --bs-hl-color bf616aff \
+  --layout-bg-color 00000000 \
+  --layout-border-color 00000000 \
+  --layout-text-color 8fbcbbff \
+  --hide-keyboard-layout \
+  --font "JetBrainsMono Nerd Font" \
+  --font-size 18

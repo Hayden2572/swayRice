@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+theme="$HOME/.config/rofi/theme.rasi"
+
+notify() {
+    notify-send "Bluetooth" "$1"
+}
+
+choose_device() {
+    mode="$1"
+
+    case "$mode" in
+        paired)
+            bluetoothctl devices Paired
+            ;;
+        connected)
+            bluetoothctl devices Connected
+            ;;
+        all)
+            bluetoothctl devices
+            ;;
+    esac | awk '
+        /^Device/ {
+            mac=$2
+            sub(/^Device [^ ]+ /, "")
+            printf "%s\t%s\n", $0, mac
+        }
+    ' | rofi -dmenu -p "$mode device" -theme "$theme"
+}
+
+action="$(
+    printf "connect paired\ndisconnect\npair new\nremove device\npower on\npower off\nopen blueman" |
+    rofi -dmenu -p "bluetooth" -theme "$theme"
+)"
+
+case "$action" in
+    "power on")
+        bluetoothctl power on
+        notify "Powered on"
+        ;;
+
+    "power off")
+        bluetoothctl power off
+        notify "Powered off"
+        ;;
+
+    "connect paired")
+        bluetoothctl power on >/dev/null
+        dev="$(choose_device paired)"
+        [ -n "$dev" ] || exit 0
+        mac="$(printf '%s' "$dev" | cut -f2)"
+        bluetoothctl connect "$mac" && notify "Connected: $(printf '%s' "$dev" | cut -f1)"
+        ;;
+
+    "disconnect")
+        dev="$(choose_device connected)"
+        [ -n "$dev" ] || exit 0
+        mac="$(printf '%s' "$dev" | cut -f2)"
+        bluetoothctl disconnect "$mac" && notify "Disconnected: $(printf '%s' "$dev" | cut -f1)"
+        ;;
+
+    "pair new")
+        bluetoothctl power on >/dev/null
+        bluetoothctl agent on >/dev/null
+        bluetoothctl default-agent >/dev/null
+
+        notify "Scanning for 8 seconds..."
+        timeout 8s bluetoothctl scan on >/dev/null 2>&1
+        bluetoothctl scan off >/dev/null 2>&1
+
+        dev="$(choose_device all)"
+        [ -n "$dev" ] || exit 0
+        mac="$(printf '%s' "$dev" | cut -f2)"
+        name="$(printf '%s' "$dev" | cut -f1)"
+
+        bluetoothctl pair "$mac"
+        bluetoothctl trust "$mac"
+        bluetoothctl connect "$mac"
+
+        notify "Paired/trusted: $name"
+        ;;
+
+    "remove device")
+        dev="$(choose_device all)"
+        [ -n "$dev" ] || exit 0
+        mac="$(printf '%s' "$dev" | cut -f2)"
+        name="$(printf '%s' "$dev" | cut -f1)"
+        bluetoothctl remove "$mac" && notify "Removed: $name"
+        ;;
+
+    "open blueman")
+        blueman-manager
+        ;;
+esac
