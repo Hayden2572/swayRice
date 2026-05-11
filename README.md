@@ -1,5 +1,4 @@
 
-
 # Sway Rice Dotfiles
 
 ## Info
